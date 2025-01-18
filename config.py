@@ -9,7 +9,7 @@ load_dotenv()
 @dataclass
 class Config:
     API_KEY: str = os.getenv("LUMA_API_KEY")
-    if not API_KEY:
-        raise ValueError("LUMA_API_KEY environment variable is not set")
+    SLACK_BOT_TOKEN: str = os.getenv("SLACK_BOT_TOKEN")
+    SLACK_SIGNING_SECRET: str = os.getenv("SLACK_SIGNING_SECRET")
     BASE_URL: str = "https://api.lu.ma/public/v1"
     DEFAULT_BUFFER_MINUTES: int = 15 

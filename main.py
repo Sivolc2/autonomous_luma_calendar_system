@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import Optional, List
 from fastapi.staticfiles import StaticFiles
@@ -10,12 +10,14 @@ from config import Config
 from models.event import Event
 from services.luma_client import LumaClient
 from services.conflict_checker import ConflictChecker
+from services.slack_client import SlackEventHandler
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 config = Config()
 luma_client = LumaClient(config)
 conflict_checker = ConflictChecker(config)
+slack_handler = SlackEventHandler(config, luma_client, conflict_checker)
 
 class EventRequest(BaseModel):
     name: str
@@ -68,6 +70,10 @@ async def get_locations() -> List[str]:
         "Phone Booth 1",
         "Phone Booth 2"
     ]
+
+@app.post("/slack/events")
+async def endpoint_slack_events(request: Request):
+    return await slack_handler.handler.handle(request)
 
 if __name__ == "__main__":
     import uvicorn

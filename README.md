@@ -76,3 +76,49 @@ Error (Conflict):
 4. Support for multiple calendars
 5. Custom buffer times per space
 
+## Slack Integration
+
+Users can create events directly from Slack using the `/event` command:
+
+```
+/event "Team Meeting" 2024-03-20 14:00 15:00 "Conference Room A" "Weekly team sync"
+```
+
+### Slack Configuration
+
+Required environment variables:
+```env
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_SIGNING_SECRET=your-signing-secret
+```
+
+### Slack Command Format
+
+```
+/event "Event Name" YYYY-MM-DD HH:MM HH:MM "Location" "Description"
+```
+
+### Slack Responses
+
+Success:
+```
+✅ Event created successfully!
+Team Meeting
+📅 March 20, 2024
+🕒 14:00 - 15:00
+📍 Conference Room A
+Event ID: evt_123abc
+```
+
+Conflict:
+```
+⚠️ Cannot create event due to conflicts:
+• Daily Standup (13:30 - 14:30)
+• Team Lunch (14:00 - 15:00)
+```
+
+Error:
+```
+❌ Error: Invalid format. Please use: /event "Event Name" YYYY-MM-DD HH:MM HH:MM "Location" "Description"
+```
+
