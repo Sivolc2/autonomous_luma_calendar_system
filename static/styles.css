@@ -103,6 +103,13 @@ button:active {
     border: 1px solid #FFE5B4;
 }
 
+/* Debug mode styling */
+.warning:contains('debug mode') {
+    background-color: #E8F0FE;
+    color: #1A73E8;
+    border-color: #4285F4;
+}
+
 .success {
     background-color: #F0F9F4;
     color: #2F5E3C;

@@ -22,7 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     // Check API status
-    fetch('/events/create', { method: 'OPTIONS' })
+    fetch('/health')
+        .then(response => response.json())
+        .then(health => {
+            if (health.debug_mode) {
+                document.getElementById('api-status').textContent = '🔧 Running in debug mode with mock data';
+                document.getElementById('api-status').classList.remove('hidden');
+            } else if (!health.integrations.luma) {
+                document.getElementById('api-status').classList.remove('hidden');
+            }
+        })
         .catch(() => {
             document.getElementById('api-status').classList.remove('hidden');
         });

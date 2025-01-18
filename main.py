@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import Optional, List
@@ -11,13 +11,24 @@ from models.event import Event
 from services.luma_client import LumaClient
 from services.conflict_checker import ConflictChecker
 from services.slack_client import SlackEventHandler
+from services.mock_luma_client import MockLumaClient
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 config = Config()
-luma_client = LumaClient(config)
+
+# Use mock client in debug mode
+if config.DEBUG_MODE:
+    luma_client = MockLumaClient()
+else:
+    luma_client = LumaClient(config)
+
 conflict_checker = ConflictChecker(config)
-slack_handler = SlackEventHandler(config, luma_client, conflict_checker)
+
+# Only initialize Slack if configured
+slack_handler = None
+if config.is_slack_configured():
+    slack_handler = SlackEventHandler(config, luma_client, conflict_checker)
 
 class EventRequest(BaseModel):
     name: str
@@ -73,7 +84,24 @@ async def get_locations() -> List[str]:
 
 @app.post("/slack/events")
 async def endpoint_slack_events(request: Request):
+    if not slack_handler:
+        raise HTTPException(
+            status_code=501,
+            detail="Slack integration not configured"
+        )
     return await slack_handler.handler.handle(request)
+
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "debug_mode": config.DEBUG_MODE,
+        "integrations": {
+            "luma": config.is_luma_configured(),
+            "slack": config.is_slack_configured()
+        }
+    }
 
 if __name__ == "__main__":
     import uvicorn

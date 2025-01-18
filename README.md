@@ -2,6 +2,8 @@
 
 A web application that provides a simple interface for creating events in Luma while automatically checking for conflicts.
 
+![Example of webapp](app_example.png)
+
 ## Features
 
 1. **Event Creation**: Simple form interface to create new events
@@ -33,7 +35,28 @@ A web application that provides a simple interface for creating events in Luma w
 Required environment variables:
 ```env
 LUMA_API_KEY=your_api_key_here # Your Luma Calendar API key
+DEBUG_MODE=true # Optional: Run in debug mode with mock data
 ```
+
+### Debug Mode
+
+To run the application in debug mode without API keys:
+
+1. Set environment variable:
+   ```env
+   DEBUG_MODE=true
+   ```
+
+2. Run the application:
+   ```bash
+   python main.py
+   ```
+
+Debug mode features:
+- Uses mock data instead of real API calls
+- Includes sample events for testing
+- Allows testing without API keys
+- Shows debug status in health check endpoint
 
 ```json
 {
@@ -121,4 +144,8 @@ Error:
 ```
 ❌ Error: Invalid format. Please use: /event "Event Name" YYYY-MM-DD HH:MM HH:MM "Location" "Description"
 ```
+
+## Deployment
+
+See [DEPLOY.md](DEPLOY.md) for detailed deployment instructions and configuration options.
 
