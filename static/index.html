@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Commons Event Creator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create an Event</h1>
+        <div id="api-status" class="warning hidden">
+            ⚠️ API key not configured. Form submission will be disabled.
+        </div>
+        
+        <form id="event-form">
+            <div class="form-group">
+                <label for="name">Event Title</label>
+                <input type="text" id="name" placeholder="What's the occasion?" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start-time">Starts</label>
+                <input type="datetime-local" id="start-time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end-time">Ends</label>
+                <input type="datetime-local" id="end-time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Space</label>
+                <select id="location" required>
+                    <option value="" disabled selected>Choose a space</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Details</label>
+                <textarea id="description" rows="4" placeholder="Share any additional details about your event..."></textarea>
+            </div>
+
+            <button type="submit">Schedule Event</button>
+        </form>
+
+        <div id="result" class="hidden"></div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html> 
