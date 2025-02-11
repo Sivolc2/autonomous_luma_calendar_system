@@ -126,7 +126,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
 
 ## Support
 
-Need help? Contact the Commons team at community@sfcommons.org
+Need help? Reach out on [Slack](https://thesfcommons.slack.com/archives/C08BGQEM3NG)
 
 ## License
 

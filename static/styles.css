@@ -323,6 +323,7 @@ select:hover, input[type="datetime-local"]:hover {
     height: auto;
     display: block;
     padding: 20px;
+    transition: transform 0.2s ease;
 }
 
 .map-tooltip-close {
@@ -472,4 +473,28 @@ select:hover, input[type="datetime-local"]:hover {
     margin-left: 2px;
     display: inline-block;
     transform: translateY(-1px);
+}
+
+.map-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    cursor: zoom-in;
+}
+
+.map-link:hover .commons-map {
+    transform: scale(1.02);
+}
+
+/* Adjust tooltip size for mobile */
+@media (max-width: 768px) {
+    .map-tooltip {
+        width: 95vw;
+        max-height: 80vh;
+    }
+
+    .commons-map {
+        padding: 10px;
+    }
 } 
