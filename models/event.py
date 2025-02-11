@@ -9,4 +9,6 @@ class Event:
     end_time: datetime
     location: str
     description: Optional[str] = None
-    event_id: Optional[str] = None 
+    event_id: Optional[str] = None
+    url: Optional[str] = None
+    host_email: Optional[str] = None 

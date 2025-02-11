@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Commons Event Creator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
     <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Create an Event</h1>
+        <img src="/static/images/commons_logo.png" alt="The Commons Logo" class="commons-logo">
+        <h1>Create a Commons Event!</h1>
+        <p class="subtitle">Need help? Reach out to <a href="https://thesfcommons.slack.com/team/U05G88KDQBF">Mirela Spasova</a></p>
         <div id="api-status" class="warning hidden">
             ⚠️ API key not configured. Form submission will be disabled.
         </div>
@@ -20,24 +25,47 @@
             </div>
 
             <div class="form-group">
-                <label for="start-time">Starts</label>
+                <label for="host-email">Host Email</label>
+                <input type="email" id="host-email" placeholder="You'll be added as a co-host" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start-time">
+                    Start
+                    <span class="time-tooltip">
+                        Check <a href="https://lu.ma/thecommons" target="_blank">Commons Calendar</a> for conflicts
+                        <span class="external-link-icon">↗</span>
+                    </span>
+                </label>
                 <input type="datetime-local" id="start-time" required>
             </div>
 
             <div class="form-group">
-                <label for="end-time">Ends</label>
+                <label for="end-time">End</label>
                 <input type="datetime-local" id="end-time" required>
             </div>
 
             <div class="form-group">
-                <label for="location">Space</label>
+                <label for="location">
+                    Space
+                    <button type="button" class="map-button" title="View Commons Map">
+                        <span class="map-icon">🗺️</span>
+                        View Map
+                    </button>
+                </label>
                 <select id="location" required>
-                    <option value="" disabled selected>Choose a space</option>
                 </select>
+                <div id="map-tooltip" class="map-tooltip hidden">
+                    <div class="map-tooltip-header">
+                        <h3>The Commons Map</h3>
+                        <div class="map-tooltip-close">×</div>
+                    </div>
+                    <img src="/static/images/commons_map.png" alt="The Commons Map" class="commons-map">
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="description">Details</label>
+                <label for="description">Details <span class="optional-label">(optional)</span></label>
                 <textarea id="description" rows="4" placeholder="Share any additional details about your event..."></textarea>
             </div>
 

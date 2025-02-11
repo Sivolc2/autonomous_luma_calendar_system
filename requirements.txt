@@ -4,4 +4,5 @@ requests==2.31.0
 python-dotenv==1.0.1
 pydantic==2.6.1
 slack-bolt==1.18.0
-slack-sdk==3.21.3 
+slack-sdk==3.21.3
+pytz==2024.1 

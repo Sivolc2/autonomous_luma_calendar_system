@@ -16,7 +16,7 @@ class ConflictChecker:
             self._events_overlap(
                 new_start, new_end,
                 event.start_time, event.end_time
-            )
+            ) and event.location == new_event.location  # Also check if same location
             for event in existing_events
         )
     

@@ -1,0 +1,58 @@
+{
+    "buildings": {
+        "540": {
+            "address": "540 Laguna St, San Francisco, CA 94102",
+            "rooms": [
+                {
+                    "id": "hogwarts",
+                    "name": "Hogwarts Hall",
+                    "description": "Main event space"
+                },
+                {
+                    "id": "library",
+                    "name": "Library",
+                    "description": "Quiet working space"
+                },
+                {
+                    "id": "cafe",
+                    "name": "Cafe",
+                    "description": "Community cafe space"
+                },
+                {
+                    "id": "wabi-sabi",
+                    "name": "Wabi-Sabi Lounge",
+                    "description": "Cozy meeting area"
+                },
+                {
+                    "id": "astrology",
+                    "name": "Astrology Lounge",
+                    "description": "Meeting space"
+                }
+            ]
+        },
+        "550": {
+            "address": "550 Laguna St, San Francisco, CA 94102",
+            "rooms": [
+                {
+                    "id": "studio-north",
+                    "name": "North Studio",
+                    "description": "North section of 550 Studio"
+                },
+                {
+                    "id": "studio-south",
+                    "name": "South Studio",
+                    "description": "South section of 550 Studio"
+                },
+                {
+                    "id": "550-full-studio",
+                    "name": "Full Studio",
+                    "description": "Full studio space"
+                }
+            ]
+        }
+    },
+    "coordinates": {
+        "latitude": "37.77612050626568",
+        "longitude": "-122.42609423007688"
+    }
+} 
