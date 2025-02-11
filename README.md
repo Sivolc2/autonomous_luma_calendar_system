@@ -1,151 +1,133 @@
-# Autonomous Luma Calendar System
+# The Commons Event Creator
 
-A web application that provides a simple interface for creating events in Luma while automatically checking for conflicts.
-
-![Example of webapp](app_example.png)
+A streamlined event creation system for The Commons, built on top of Luma's API. This tool helps members create events while automatically checking for room conflicts and managing host permissions.
 
 ## Features
 
-1. **Event Creation**: Simple form interface to create new events
-2. **Conflict Detection**: Automatically checks for time/space conflicts
-3. **Location Management**: Predefined spaces to choose from
-4. **Buffer Time**: Includes buffer time between events (configurable)
+- 🗓️ Create events with automatic conflict detection
+- 🏠 Visual room selection with interactive map
+- 👥 Automatic host verification and co-host addition
+- 🕒 Smart default time suggestions
+- 🔄 Real-time conflict checking
+- 🎨 Beautiful, user-friendly interface
 
-## Backend Architecture
+## For Administrators
 
-### API Endpoints
+### Room Configuration
 
-1. `GET /` - Serves the main application interface
-2. `GET /locations` - Returns available spaces/rooms
-3. `POST /events/create` - Creates a new event with conflict checking
+To update available rooms and buildings:
 
-### Event Creation Flow
+1. Navigate to `config/rooms.json`
+2. Edit the JSON file structure:
+   ```json
+   {
+     "buildings": {
+       "540": {
+         "address": "540 Laguna St, San Francisco, CA 94102",
+         "rooms": [
+           {
+             "id": "hogwarts",
+             "name": "Hogwarts Hall",
+             "description": "Main event space"
+           },
+           // Add more rooms here...
+         ]
+       }
+     }
+   }
+   ```
+3. Save the file - changes will be reflected immediately
 
-1. User submits event details through the form
-2. Backend validates the request
-3. System checks for conflicts by:
-   - Fetching existing events for that day using Luma's `/calendar/list-events` endpoint
-   - Comparing time slots including buffer time
-   - Checking space availability
-4. If no conflicts, creates event using Luma's API
-5. Returns success/error response to user
+### Updating the Map
 
-### Configuration
+To update the Commons map:
 
-Required environment variables:
-```env
-LUMA_API_KEY=your_api_key_here # Your Luma Calendar API key
-DEBUG_MODE=true # Optional: Run in debug mode with mock data
+1. Replace the file at `static/images/commons_map.png`
+2. Make sure the new image:
+   - Is in PNG format
+   - Has a clear layout of all rooms
+   - Is optimized for web (recommended size: 1000-1500px wide)
+   - Has good contrast for readability
+
+### Environment Configuration
+
+Create a `.env` file with:
+```bash
+LUMA_API_KEY=your_api_key_here
+LUMA_API_BASE_URL=https://api.lu.ma/public/v1
+DEBUG_MODE=false
+DEFAULT_BUFFER_MINUTES=0
 ```
 
-### Debug Mode
+## For Developers
 
-To run the application in debug mode without API keys:
+### Setup
 
-1. Set environment variable:
-   ```env
-   DEBUG_MODE=true
+1. Clone the repository
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
-
-2. Run the application:
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Set up environment variables (see above)
+5. Run the application:
    ```bash
    python main.py
    ```
 
-Debug mode features:
-- Uses mock data instead of real API calls
-- Includes sample events for testing
-- Allows testing without API keys
-- Shows debug status in health check endpoint
+### Testing
 
-```json
-{
-"name": "Team Meeting",
-"start_time": "2024-03-20T14:00:00",
-"end_time": "2024-03-20T15:00:00",
-"location": "Conference Room A",
-"description": "Weekly team sync"
-}
+Run tests with:
+```bash
+python -m pytest
 ```
 
+## Future Features & Improvements
 
-### Example Response
-Success:
-```json
-{
-"event_id": "evt_123abc",
-"message": "Event created successfully"
-}
-```
+Here are some exciting potential features for future development:
 
-Error (Conflict):
-```json
-{
-"detail": "Event conflicts with existing events"
-}
-```
+### Integration Possibilities
+- 🤖 Slack Integration
+  - Allow event creation directly from Slack
+  - Send notifications about new events
+  - Room booking commands
+- 📱 Mobile App Integration
+  - Native mobile experience
+  - Push notifications
+- 📧 Email Notifications
+  - Custom email templates
+  - Calendar invites
 
-## Known Limitations
+### Feature Enhancements
+- 🔄 Recurring Events
+  - Support for weekly/monthly events
+  - Series management
+- 🎨 Room Layouts
+  - Interactive room setup options
+  - Capacity tracking
+- 📊 Analytics Dashboard
+  - Usage statistics
+  - Popular time slots
+  - Room utilization
 
-1. The Luma API endpoint `/calendar/list-events` only returns events managed by your Calendar, not events that are listed but not managed
-2. All times are handled in ISO 8601 format
-3. Buffer time is currently fixed at 15 minutes (configurable in config.py)
+### User Experience
+- 🌙 Dark Mode
+- 🌐 Multi-language Support
+- 📱 Responsive Design Improvements
+- 🎟️ Waitlist Management
 
-## Future Improvements
+## Contributing
 
-1. Add recurring event support
-2. Implement calendar view of existing events
-3. Add email notifications for conflicts
-4. Support for multiple calendars
-5. Custom buffer times per space
+We welcome contributions! Please see our contributing guidelines for more details.
 
-## Slack Integration
+## Support
 
-Users can create events directly from Slack using the `/event` command:
+Need help? Contact the Commons team at community@sfcommons.org
 
-```
-/event "Team Meeting" 2024-03-20 14:00 15:00 "Conference Room A" "Weekly team sync"
-```
+## License
 
-### Slack Configuration
-
-Required environment variables:
-```env
-SLACK_BOT_TOKEN=xoxb-your-bot-token
-SLACK_SIGNING_SECRET=your-signing-secret
-```
-
-### Slack Command Format
-
-```
-/event "Event Name" YYYY-MM-DD HH:MM HH:MM "Location" "Description"
-```
-
-### Slack Responses
-
-Success:
-```
-✅ Event created successfully!
-Team Meeting
-📅 March 20, 2024
-🕒 14:00 - 15:00
-📍 Conference Room A
-Event ID: evt_123abc
-```
-
-Conflict:
-```
-⚠️ Cannot create event due to conflicts:
-• Daily Standup (13:30 - 14:30)
-• Team Lunch (14:00 - 15:00)
-```
-
-Error:
-```
-❌ Error: Invalid format. Please use: /event "Event Name" YYYY-MM-DD HH:MM HH:MM "Location" "Description"
-```
-
-## Deployment
-
-See [DEPLOY.md](DEPLOY.md) for detailed deployment instructions and configuration options.
-
+This project is proprietary and for use by The Commons only.
