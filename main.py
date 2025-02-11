@@ -11,7 +11,6 @@ from config import Config
 from models.event import Event
 from services.luma_client import LumaClient
 from services.conflict_checker import ConflictChecker
-from services.slack_client import SlackEventHandler
 from services.mock_luma_client import MockLumaClient
 
 app = FastAPI()
@@ -30,18 +29,13 @@ else:
 
 conflict_checker = ConflictChecker(config)
 
-# Only initialize Slack if configured
-slack_handler = None
-if config.is_slack_configured():
-    slack_handler = SlackEventHandler(config, luma_client, conflict_checker)
-
 class EventRequest(BaseModel):
     name: str
     start_time: datetime
     end_time: datetime
     location: str
     description: Optional[str] = None
-    host_email: str  # Make this required
+    host_email: str
 
 @app.post("/events/create")
 async def create_event(event_request: EventRequest):
@@ -52,7 +46,7 @@ async def create_event(event_request: EventRequest):
         end_time=event_request.end_time,
         location=event_request.location,
         description=event_request.description,
-        host_email=event_request.host_email  # Pass the host email
+        host_email=event_request.host_email
     )
     
     # Get existing events for the day
@@ -110,15 +104,6 @@ async def get_locations() -> List[dict]:
             })
     return rooms
 
-@app.post("/slack/events")
-async def endpoint_slack_events(request: Request):
-    if not slack_handler:
-        raise HTTPException(
-            status_code=501,
-            detail="Slack integration not configured"
-        )
-    return await slack_handler.handler.handle(request)
-
 @app.get("/health")
 async def health_check():
     return {
@@ -126,8 +111,7 @@ async def health_check():
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "debug_mode": config.DEBUG_MODE,
         "integrations": {
-            "luma": config.is_luma_configured(),
-            "slack": config.is_slack_configured()
+            "luma": config.is_luma_configured()
         }
     }
 
@@ -158,7 +142,7 @@ async def get_event(event_id: str):
             "end_time": event.end_time.isoformat(),
             "location": event.location,
             "description": event.description,
-            "url": event.url  # This will be the public URL
+            "url": event.url
         }
     except Exception as e:
         raise HTTPException(
