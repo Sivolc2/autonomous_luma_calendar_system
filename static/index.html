@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Commons Event Creator</title>
+    <title>Host an event at The Commons</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
     <link rel="stylesheet" href="/static/styles.css">
@@ -12,8 +12,8 @@
 <body>
     <div class="container">
         <img src="/static/images/commons_logo.png" alt="The Commons Logo" class="commons-logo">
-        <h1>Create a Commons Event!</h1>
-        <p class="subtitle">Need help? Reach out in <a href="https://thesfcommons.slack.com/archives/C08BGQEM3NG">#events-and-spaces</a></p>
+        <h1>Host an event at The Commons</h1>
+        <p class="subtitle">Need help? Looking for a collaborator? Reach out in <a href="https://thesfcommons.slack.com/archives/C08BGQEM3NG">#12-event-hosts</a></p>
         <div id="api-status" class="warning hidden">
             ⚠️ API key not configured. Form submission will be disabled.
         </div>
@@ -21,19 +21,30 @@
         <form id="event-form">
             <div class="form-group">
                 <label for="name">Event Title</label>
-                <input type="text" id="name" placeholder="What's the occasion?" required>
+                <input type="text" id="name" placeholder="e.g., Commons Writing Club" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event-type">Event Scope</label>
+                <select id="event-type" required>
+                    <option value="" disabled selected>Select scope</option>
+                    <option value="[members only]">[members only]</option>
+                    <option value="[members and +1s]">[members and +1s]</option>
+                    <option value="[public]">[public]</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label for="host-email">Host Email</label>
                 <input type="email" id="host-email" placeholder="You'll be added as a co-host" required>
+                <span class="helper-text">Use the email you use for our <a href="https://lu.ma/thecommons" target="_blank">Luma calendar</a></span>
             </div>
 
             <div class="form-group">
                 <label for="start-time">
                     Start
                     <span class="time-tooltip">
-                        Check <a href="https://lu.ma/thecommons" target="_blank">Commons Calendar</a> for conflicts
+                        Check <a href="https://calendar.google.com/calendar/u/1?cid=dGhlc2Zjb21tb25zQGdtYWlsLmNvbQ" target="_blank">Commons Calendar</a> for conflicts
                         <span class="external-link-icon">↗</span>
                     </span>
                 </label>
@@ -66,12 +77,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="description">Details <span class="optional-label">(optional)</span></label>
-                <textarea id="description" rows="4" placeholder="Share any additional details about your event..."></textarea>
-            </div>
-
-            <button type="submit">Schedule Event</button>
+            <button type="submit">Create the Event!</button>
         </form>
 
         <div id="result" class="hidden"></div>

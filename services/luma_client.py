@@ -134,9 +134,6 @@ class LumaClient:
             "geo_longitude": self.rooms_config["coordinates"]["longitude"]
         }
         
-        if event.description:
-            payload["description"] = event.description
-        
         print(f"Creating event with payload: {payload}")  # Debug print
         
         response = requests.post(
@@ -173,8 +170,11 @@ class LumaClient:
             headers=self.headers,
             params={"api_id": event_id}
         )
+        print(f"Get event response: {response.text}")  # Debug log
         response.raise_for_status()
-        return self._parse_event(response.json()["event"])
+        event_data = response.json()["event"]
+        print(f"Event data from API: {event_data}")  # Debug log
+        return self._parse_event(event_data)
     
     def _parse_event(self, event_data: dict) -> Event:
         print(f"Raw event data: {event_data}")  # Debug print
@@ -182,10 +182,7 @@ class LumaClient:
         # Extract location from geo_address_json
         location = None
         if geo_json := event_data.get("geo_address_json"):
-            # Try different fields in order of preference
-            if description := geo_json.get("description"):
-                location = description
-            elif address := geo_json.get("address"):
+            if address := geo_json.get("address"):
                 # Try to extract room name from address (after the '+' if it exists)
                 if "+" in address:
                     location = address.split("+")[1].strip()
@@ -194,10 +191,10 @@ class LumaClient:
             elif full_address := geo_json.get("full_address"):
                 location = full_address
         
-        # If we still don't have a location, try to extract from the event name or description
+        # If we still don't have a location, try to extract from the event name
         if not location:
-            # Look for room names in the event name or description
-            event_text = f"{event_data.get('name', '')} {event_data.get('description', '')}"
+            # Look for room names in the event name
+            event_text = event_data.get('name', '')
             for building in self.rooms_config["buildings"].values():
                 for room in building["rooms"]:
                     if room["name"] in event_text:
@@ -215,7 +212,6 @@ class LumaClient:
             start_time=datetime.fromisoformat(event_data["start_at"].replace('Z', '+00:00')),
             end_time=datetime.fromisoformat(event_data["end_at"].replace('Z', '+00:00')),
             location=location,
-            description=event_data.get("description", ""),
             event_id=event_data["api_id"],
             url=event_data.get("url")  # Get the public URL from the API response
         )

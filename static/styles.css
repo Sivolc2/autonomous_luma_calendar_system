@@ -28,9 +28,8 @@ body {
 }
 
 .commons-logo {
-    position: absolute;
-    top: 30px;
-    left: 30px;
+    display: block;
+    margin: 0 auto 40px;
     width: 60px;
     height: auto;
     opacity: 0.9;
@@ -499,4 +498,49 @@ select:hover, input[type="datetime-local"]:hover {
     .commons-map {
         padding: 5px;
     }
+}
+
+#event-type {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#event-type option {
+    padding: 10px;
+    font-size: 16px;
+}
+
+#event-type option:first-child {
+    color: #718096;
+}
+
+/* Update existing select styles */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%234F4F4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 15px center;
+    background-repeat: no-repeat;
+    padding-right: 45px;
+}
+
+.helper-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.helper-text a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.helper-text a:hover {
+    color: #004999;
+    text-decoration: underline;
 } 

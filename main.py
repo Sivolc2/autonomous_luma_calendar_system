@@ -34,7 +34,6 @@ class EventRequest(BaseModel):
     start_time: datetime
     end_time: datetime
     location: str
-    description: Optional[str] = None
     host_email: str
 
 @app.post("/events/create")
@@ -45,7 +44,6 @@ async def create_event(event_request: EventRequest):
         start_time=event_request.start_time,
         end_time=event_request.end_time,
         location=event_request.location,
-        description=event_request.description,
         host_email=event_request.host_email
     )
     
@@ -141,7 +139,6 @@ async def get_event(event_id: str):
             "start_time": event.start_time.isoformat(),
             "end_time": event.end_time.isoformat(),
             "location": event.location,
-            "description": event.description,
             "url": event.url
         }
     except Exception as e:

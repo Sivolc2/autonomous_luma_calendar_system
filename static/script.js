@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize datetime pickers
     const commonConfig = {
         enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "m-d-Y h:i K",  // MM-DD-YYYY HH:MM AM/PM
         minuteIncrement: 15,
         time_24hr: false,
         allowInput: true,
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 buildingRooms.forEach(room => {
                     const option = document.createElement('option');
                     option.value = room.name;
-                    option.textContent = room.name;
+                    option.textContent = `${room.name} (${room.description})`;
                     option.title = room.description;  // Add description as tooltip
                     optgroup.appendChild(option);
                 });
@@ -179,12 +179,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const startDate = startPicker.selectedDates[0];
         const endDate = endPicker.selectedDates[0];
         
+        // Combine event title with event type
+        const eventTitle = document.getElementById('name').value;
+        const eventType = document.getElementById('event-type').value;
+        const fullEventTitle = `${eventTitle} ${eventType}`;
+        
         const eventData = {
-            name: document.getElementById('name').value,
+            name: fullEventTitle,
             start_time: startDate.toISOString(),  // This will be in UTC
             end_time: endDate.toISOString(),      // This will be in UTC
             location: document.getElementById('location').value,
-            description: document.getElementById('description').value || undefined,  // Don't send empty string
             host_email: document.getElementById('host-email').value
         };
 
@@ -209,18 +213,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (eventDetailsResponse.ok) {
                     const eventDetails = await eventDetailsResponse.json();
+                    console.log('Event details:', eventDetails);  // Debug log
                     result.className = 'success';
-                    result.innerHTML = `
-                        Event created successfully!<br>
-                        <a href="${eventDetails.url}" target="_blank" class="event-link">
-                            View Event on Luma
-                            <span class="external-link-icon">↗</span>
-                        </a>
-                    `;
+                    
+                    if (eventDetails.url) {
+                        result.innerHTML = `
+                            Event created successfully!<br>
+                            <a href="${eventDetails.url}" target="_blank" class="event-link">
+                                View Event on Luma
+                                <span class="external-link-icon">↗</span>
+                            </a>
+                        `;
+                    } else {
+                        result.textContent = 'Event created successfully! Check your email for the event link.';
+                    }
                 } else {
                     // Fallback to showing just the success message if we can't get the URL
+                    console.log('Failed to get event details:', await eventDetailsResponse.text());  // Debug log
                     result.className = 'success';
-                    result.textContent = 'Event created successfully!';
+                    result.textContent = 'Event created successfully! Check your email for the event link.';
                 }
                 
                 form.reset();
@@ -250,5 +261,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
         result.classList.remove('hidden');
         result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
+    }); 
 }); 
