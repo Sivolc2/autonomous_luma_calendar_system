@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 @dataclass
 class Event:
@@ -10,4 +10,5 @@ class Event:
     location: str
     event_id: Optional[str] = None
     url: Optional[str] = None
-    host_email: Optional[str] = None 
+    host_email: Optional[str] = None
+    additional_hosts: Optional[List[str]] = None 

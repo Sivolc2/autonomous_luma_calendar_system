@@ -10,6 +10,57 @@ document.addEventListener('DOMContentLoaded', function() {
         theme: "airbnb"
     };
 
+    // Email list handling
+    const hostEmails = new Set();
+    const emailInput = document.getElementById('host-email');
+    const emailList = document.getElementById('email-list');
+    const addEmailButton = document.getElementById('add-email');
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function addEmail(email) {
+        if (!email || !isValidEmail(email) || hostEmails.has(email)) return false;
+        
+        hostEmails.add(email);
+        const emailItem = document.createElement('div');
+        emailItem.className = 'email-item';
+        emailItem.innerHTML = `
+            <span class="email-check">✓</span>
+            <span class="email-text">${email}</span>
+            <button type="button" class="remove-email" aria-label="Remove email">×</button>
+        `;
+
+        const removeButton = emailItem.querySelector('.remove-email');
+        removeButton.addEventListener('click', () => {
+            emailItem.remove();
+            hostEmails.delete(email);
+        });
+
+        emailList.appendChild(emailItem);
+        emailInput.value = '';
+        return true;
+    }
+
+    function handleEmailAdd() {
+        const email = emailInput.value.trim();
+        if (email && !addEmail(email)) {
+            // Show error if email is invalid or duplicate
+            emailInput.classList.add('error');
+            setTimeout(() => emailInput.classList.remove('error'), 1000);
+        }
+    }
+
+    addEmailButton.addEventListener('click', handleEmailAdd);
+    
+    emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleEmailAdd();
+        }
+    });
+
     // Get current date/time and add 1 hour for default start time
     const now = new Date();
     // Round to nearest 15 minutes
@@ -171,6 +222,14 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        if (hostEmails.size === 0) {
+            result.className = 'error';
+            result.textContent = 'Please add at least one host email';
+            result.classList.remove('hidden');
+            result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            return;
+        }
+
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = 'Creating...';
@@ -186,10 +245,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const eventData = {
             name: fullEventTitle,
-            start_time: startDate.toISOString(),  // This will be in UTC
-            end_time: endDate.toISOString(),      // This will be in UTC
+            start_time: startDate.toISOString(),
+            end_time: endDate.toISOString(),
             location: document.getElementById('location').value,
-            host_email: document.getElementById('host-email').value
+            host_email: Array.from(hostEmails)[0], // Primary host
+            additional_hosts: Array.from(hostEmails).slice(1) // Additional hosts
         };
 
         try {
@@ -219,13 +279,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (eventDetails.url) {
                         result.innerHTML = `
                             Event created successfully!<br>
+                            <div class="description-warning">Make sure to update your description! :)</div>
                             <a href="${eventDetails.url}" target="_blank" class="event-link">
                                 View Event on Luma
                                 <span class="external-link-icon">↗</span>
                             </a>
                         `;
                     } else {
-                        result.textContent = 'Event created successfully! Check your email for the event link.';
+                        result.textContent = 'Event created successfully! Check your email for the event link and remember to update your description! :)';
                     }
                 } else {
                     // Fallback to showing just the success message if we can't get the URL

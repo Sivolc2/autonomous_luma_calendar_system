@@ -153,13 +153,26 @@ class LumaClient:
         # If host email is provided, add them as a host
         if event.host_email:
             try:
-                print(f"Attempting to add host {event.host_email}")  # Debug print
+                print(f"Attempting to add primary host {event.host_email}")  # Debug print
                 self.add_host(event_id, event.host_email)
-                print("Successfully added host")  # Debug print
+                print("Successfully added primary host")  # Debug print
+                
+                # Add additional hosts if they exist
+                if event.additional_hosts:
+                    for additional_host in event.additional_hosts:
+                        try:
+                            print(f"Attempting to add additional host {additional_host}")  # Debug print
+                            self.add_host(event_id, additional_host)
+                            print(f"Successfully added additional host {additional_host}")  # Debug print
+                        except Exception as e:
+                            print(f"Failed to add additional host {additional_host}: {str(e)}")  # Debug print
+                            # Continue with other hosts even if one fails
+                            continue
+                            
             except Exception as e:
-                error_msg = f"Failed to add host: {str(e)}"
+                error_msg = f"Failed to add hosts: {str(e)}"
                 print(error_msg)  # Debug print
-                raise Exception(error_msg)  # Raise the error instead of silently continuing
+                raise Exception(error_msg)
 
         return event_id
     

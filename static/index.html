@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Host an event at The Commons</title>
+    <title>Host an Event at The Commons</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
     <link rel="stylesheet" href="/static/styles.css">
@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <img src="/static/images/commons_logo.png" alt="The Commons Logo" class="commons-logo">
-        <h1>Host an event at The Commons</h1>
+        <h1>Host an Event at The Commons</h1>
         <p class="subtitle">Need help? Looking for a collaborator? Reach out in <a href="https://thesfcommons.slack.com/archives/C08BGQEM3NG">#12-event-hosts</a></p>
         <div id="api-status" class="warning hidden">
             ⚠️ API key not configured. Form submission will be disabled.
@@ -25,9 +25,9 @@
             </div>
 
             <div class="form-group">
-                <label for="event-type">Event Scope</label>
+                <label for="event-type">Attendees</label>
                 <select id="event-type" required>
-                    <option value="" disabled selected>Select scope</option>
+                    <option value="" disabled selected>Select attendee type</option>
                     <option value="[members only]">[members only]</option>
                     <option value="[members and +1s]">[members and +1s]</option>
                     <option value="[public]">[public]</option>
@@ -35,9 +35,13 @@
             </div>
 
             <div class="form-group">
-                <label for="host-email">Host Email</label>
-                <input type="email" id="host-email" placeholder="You'll be added as a co-host" required>
-                <span class="helper-text">Use the email you use for our <a href="https://lu.ma/thecommons" target="_blank">Luma calendar</a></span>
+                <label for="host-email">Host Emails</label>
+                <div class="email-input-container">
+                    <input type="email" id="host-email" placeholder="Enter host email and press Enter" aria-label="Enter host email">
+                    <button type="button" id="add-email" class="add-email-button">Add</button>
+                </div>
+                <div id="email-list" class="email-list"></div>
+                <span class="helper-text">Use the emails you use for our <a href="https://lu.ma/thecommons" target="_blank">Luma calendar</a></span>
             </div>
 
             <div class="form-group">

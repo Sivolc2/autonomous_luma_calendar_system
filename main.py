@@ -35,6 +35,7 @@ class EventRequest(BaseModel):
     end_time: datetime
     location: str
     host_email: str
+    additional_hosts: Optional[List[str]] = None
 
 @app.post("/events/create")
 async def create_event(event_request: EventRequest):
@@ -44,7 +45,8 @@ async def create_event(event_request: EventRequest):
         start_time=event_request.start_time,
         end_time=event_request.end_time,
         location=event_request.location,
-        host_email=event_request.host_email
+        host_email=event_request.host_email,
+        additional_hosts=event_request.additional_hosts
     )
     
     # Get existing events for the day
