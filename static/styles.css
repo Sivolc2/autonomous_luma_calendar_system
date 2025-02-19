@@ -5,9 +5,9 @@
     --text-color: #4F4F4F;
     --border-color: #E2E8F0;
     --input-background: #FFFFFF;
-    --body-font: "Freight Text Pro", "Times New Roman", serif;
-    --heading-font: "Freight Display Pro", "Times New Roman", serif;
-    --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --body-font: 'Lora', serif;
+    --heading-font: 'Lora', serif;
+    --ui-font: 'Lora', serif;
 }
 
 body {
@@ -187,7 +187,7 @@ input[type="datetime-local"] {
 .flatpickr-calendar {
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    font-family: var(--body-font);
+    font-family: var(--body-font) !important;
 }
 
 .flatpickr-day.selected {
@@ -660,4 +660,43 @@ input::placeholder, textarea::placeholder {
 .email-check {
     color: #28a745;
     font-size: 16px;
+}
+
+/* Override flatpickr font */
+.flatpickr-current-month {
+    font-family: var(--body-font) !important;
+}
+
+.flatpickr-monthDropdown-months {
+    font-family: var(--body-font) !important;
+}
+
+.flatpickr-weekday {
+    font-family: var(--body-font) !important;
+}
+
+.flatpickr-time input {
+    font-family: var(--body-font) !important;
+}
+
+.numInputWrapper input {
+    font-family: var(--body-font) !important;
+}
+
+/* Ensure all form elements use Lora */
+input, 
+textarea, 
+select, 
+button,
+option,
+.helper-text,
+.time-tooltip,
+.map-tooltip-header h3,
+.subtitle,
+.event-link,
+.description-warning,
+.email-text,
+.map-button,
+.remove-email {
+    font-family: var(--body-font) !important;
 } 

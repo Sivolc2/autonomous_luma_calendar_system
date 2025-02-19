@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
         dateFormat: "m-d-Y h:i K",  // MM-DD-YYYY HH:MM AM/PM
         minuteIncrement: 15,
         time_24hr: false,
-        allowInput: true,
+        allowInput: false,  // Disable manual input to prevent invalid times
         position: "auto",
-        theme: "airbnb"
+        theme: "airbnb",
+        disableMobile: true  // Prevent mobile devices from using native datetime picker
     };
 
     // Email list handling
@@ -61,10 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Get current date/time and add 1 hour for default start time
+    // Get current date/time and round to nearest 15 minutes
     const now = new Date();
-    // Round to nearest 15 minutes
-    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
+    const minutes = now.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / 15) * 15;
+    now.setMinutes(roundedMinutes);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
     const defaultStart = new Date(now);
     defaultStart.setHours(defaultStart.getHours() + 1);
     // Default end time is 1 hour after start
@@ -80,6 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedDates.length === 0) return;
             
             const startDate = selectedDates[0];
+            // Ensure time is rounded to 15 minutes
+            const minutes = startDate.getMinutes();
+            const roundedMinutes = Math.ceil(minutes / 15) * 15;
+            startDate.setMinutes(roundedMinutes);
+            startDate.setSeconds(0);
+            startDate.setMilliseconds(0);
+            
             // Update end time min date when start time changes
             endPicker.set('minDate', startDate);
             
@@ -100,8 +112,16 @@ document.addEventListener('DOMContentLoaded', function() {
         onChange: function(selectedDates) {
             if (selectedDates.length === 0) return;
             
+            const endDate = selectedDates[0];
+            // Ensure time is rounded to 15 minutes
+            const minutes = endDate.getMinutes();
+            const roundedMinutes = Math.ceil(minutes / 15) * 15;
+            endDate.setMinutes(roundedMinutes);
+            endDate.setSeconds(0);
+            endDate.setMilliseconds(0);
+            
             // Update start time max date when end time changes
-            startPicker.set('maxDate', selectedDates[0]);
+            startPicker.set('maxDate', endDate);
         }
     });
 
