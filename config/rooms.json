@@ -53,6 +53,16 @@
                 }
             ]
         }
+        "Fieldtrip": {
+            "address": "540 Laguna St, San Francisco, CA 94102",
+            "rooms": [
+                {
+                    "id": "fieldtrip",
+                    "name": "Outside of Commons",
+                    "description": "invite members on a trip somewhere else"
+                }
+            ]
+        },
     },
     "coordinates": {
         "latitude": "37.77612050626568",
