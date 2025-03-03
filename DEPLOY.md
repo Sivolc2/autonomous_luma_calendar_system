@@ -23,25 +23,29 @@ This guide covers deploying the Autonomous Luma Calendar System to various platf
    ```bash
    heroku create your-app-name
    ```
+   OR if it's already created:
+   ```bash
+   heroku git:remote -a the-commons-events
+   ```
 
-3. **Configure Environment Variables**
+4. **Configure Environment Variables**
    ```bash
    heroku config:set LUMA_API_KEY=your_api_key
    heroku config:set SLACK_BOT_TOKEN=your_slack_bot_token
    heroku config:set SLACK_SIGNING_SECRET=your_slack_signing_secret
    ```
 
-4. **Deploy to Heroku**
+5. **Deploy to Heroku**
    ```bash
    git push heroku main
    ```
 
-5. **Verify Deployment**
+6. **Verify Deployment**
    ```bash
    heroku open
    ```
 
-6. **View Logs (if needed)**
+7. **View Logs (if needed)**
    ```bash
    heroku logs --tail
    ```
